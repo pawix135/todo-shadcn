@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { Input } from "./components/ui/input";
 import { Button } from "./components/ui/button";
-import { selectTodos, todoAdd, todoRemove, todoToggle } from "./slices/todoSlice";
-import { useAppDispatch, useAppSelector } from "./hooks/storeHooks";
-import TodoItme from "./components/TodoItem";
+import { todoAdd, todoClear } from "./slices/todoSlice";
+import { useAppDispatch } from "./hooks/storeHooks";
 import { useToast } from "./components/ui/use-toast";
+import TodoList from "./components/TodoList";
+import { Settings } from "lucide-react";
 
 function App() {
   const [title, setTitle] = useState<string>("");
   const { toast } = useToast();
 
-  const todos = useAppSelector(selectTodos);
   const dispatch = useAppDispatch();
+
+  const clear = () => {
+    dispatch(todoClear());
+  };
 
   const addtodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,25 +30,24 @@ function App() {
     dispatch(todoAdd());
   };
 
-  const removeTodo = (id: string) => {
-    dispatch(todoRemove(id));
-  };
-
-  const toggleTodo = (id: string) => {
-    dispatch(todoToggle(id));
-  };
-
   return (
-    <main className="container mx-auto bg-primary-foreground py-5 rounded-md shadow-lg mt-5">
-      <form onSubmit={addtodo} className="grid grid-cols-6 grid-rows-1 gap-5">
-        <Input placeholder="Milk..." value={title} onChange={(e) => setTitle(e.target.value)} className="col-span-5" />
-        <Button type="submit">Add</Button>
+    <main className="container mx-auto bg-primary-foreground py-5 rounded-md shadow-lg  flex flex-col gap-5 lg:my-5">
+      <form
+        onSubmit={addtodo}
+        className="flex flex-row items-center gap-5 sticky top-0 left-0 z-50 bg-primary-foreground py-5 md:py-3 shadow-md"
+      >
+        <Settings className="col-span-1" onClick={clear} />
+        <Input
+          placeholder="Milk..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="col-span-4 place-self-start "
+        />
+        <Button type="submit" className="col-span-1">
+          Add
+        </Button>
       </form>
-      <div className="flex flex-col gap-5">
-        {todos.map((todo) => (
-          <TodoItme todo={todo} key={todo.id} removeTodo={removeTodo} toggleTodo={toggleTodo} />
-        ))}
-      </div>
+      <TodoList />
     </main>
   );
 }

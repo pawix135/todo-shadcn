@@ -1,6 +1,7 @@
 import { v4 } from "uuid";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
+import { faker } from "@faker-js/faker";
 
 const initialTodoState: Todo[] = [];
 
@@ -9,7 +10,16 @@ const todoSlice = createSlice({
   initialState: initialTodoState,
   reducers: {
     todoAdd: (state) => {
-      state.push({ created_at: Date.now(), done: false, title: v4(), updated_at: Date.now(), id: v4() });
+      state.push({
+        created_at: Date.now(),
+        done: false,
+        title: faker.word.adjective(),
+        updated_at: Date.now(),
+        id: v4(),
+      });
+    },
+    todoClear: (state) => {
+      state.splice(0, state.length);
     },
     todoToggle: (state, action: PayloadAction<string>) => {
       const todo = state.find((todo) => todo.id === action.payload);
@@ -25,7 +35,7 @@ const todoSlice = createSlice({
   },
 });
 
-export const { todoAdd, todoRemove, todoToggle } = todoSlice.actions;
+export const { todoAdd, todoRemove, todoToggle, todoClear } = todoSlice.actions;
 
 export const selectTodos = (state: RootState) => state.todos;
 
