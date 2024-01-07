@@ -39,7 +39,7 @@ const TodoItme: React.FC<Props> = React.memo(({ todo, toggle, remove }) => {
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
-        <div className="flex flex-row justify-between items-center w-full">
+        <div className="flex flex-row justify-between items-center w-full gap-2">
           <span>{todo.title}</span>
           <AnimatedButton style={toggleProps} variant={"ghost"} size={"icon"} onClick={toggleTodo}>
             {todo.done ? <CheckSquare2 fill="green" color="white" /> : <Scan color="red" />}

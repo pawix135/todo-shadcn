@@ -8,7 +8,7 @@ import { Toaster } from "./components/ui/toaster.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StoreProvider store={store}>
-    <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <App />
       <Toaster />
     </ThemeProvider>

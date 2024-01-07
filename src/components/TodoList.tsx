@@ -1,9 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/storeHooks";
 import { selectTodos, todoRemove, todoToggle } from "@/slices/todoSlice";
 import TodoItem from "./TodoItem";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useTransition, animated } from "@react-spring/web";
 import { ListChecks } from "lucide-react";
+import { sortByDone } from "@/lib/sortings";
 
 const TodoList = () => {
   const todos = useAppSelector(selectTodos);
@@ -23,11 +24,15 @@ const TodoList = () => {
     [dispatch]
   );
 
-  const todoTransitions = useTransition(todos, {
+  const sortedTodos = useMemo(() => {
+    return sortByDone(todos);
+  }, [todos]);
+
+  const todoTransitions = useTransition(sortedTodos, {
     from: { opacity: 0, transform: "translate3d(0px,-30px,0)" },
     enter: { opacity: 1, transform: "translate3d(0,0px,0)" },
     leave: { opacity: 0, transform: "translate3d(0,30px,0)" },
-    keys: todos.map((item) => item.id),
+    keys: sortedTodos.map((item) => item.id),
     config: {
       duration: 300,
     },
